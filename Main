@@ -123,10 +123,43 @@ class Library:
 # Main program
 library = Library()
 
-# Add some books to the library
-library.add_book(Book("Introduction to Calculus and Analysis", "Mathematics", "Richard Courant and Fritz John", "9780471000051"))
-library.add_book(Book("Calculus", "Mathematics", "Michael Spivak", "9780914098911"))
-# ... (add more books as needed)
+#Electrical Category
+library.add_book(Book("Essential Manager's Manual","Electrical","Robert Heller & Tim Hindle","0-7513-0400-x"))
+library.add_book(Book("Electrical Safety","Electrical","","978-1-68095-498-2"))
+library.add_book(Book("Electrical Technology","Electrical","","978-93-5115-156-2"))
+library.add_book(Book("Electricity for Refrigeration, heating and airconditioning","Electrical","Russell E. Smith","978-1-4180-4287-5"))
+library.add_book(Book("Old Electrical Wiring","Electrical", "David E. Sharpiro","978-0071-663571"))
+#Circuits Category
+library.add_book(Book("Introduction to Electric Circuits","Circuits","Richard C. Dorf & James A. Svoboda","978-0-470-55302-2"))
+library.add_book(Book("Engineering Circuit Analysis","Circuits","William H. Hayt, Jack E. Kemmerly & Steven M. Ourbin","0-07-121043-1"))
+library.add_book(Book("Circuit Analysis","Circuits","John M. Santiago Jr., PhD","978-1-118-49312-0"))
+library.add_book(Book("Fundamental of Electric Circuits","Circuits","Alexander Sadiku","978-007-126647-5"))
+library.add_book(Book("Electric Circuits","Circuits","Mahmood Nahvi, Phd. & Joseph A. Edminister","978-0-07-183045-4"))
+#Philosophy
+library.add_book(Book("Fundamental of Philosophy","Philosophy","Aliana Grimes","978-1632-4099-66"))
+library.add_book(Book("Understanding logic and critical thinking","Philosophy","Layla Barnaby","978-16323-9997"))
+#Programming
+library.add_book(Book("Java Programs to Accompany Programming Logic and Design","Programming","Joyce Farrell","978-0-538-74477-5"))
+library.add_book(Book("Java Programming","Programming","","978-93-5115-513-3"))
+library.add_book(Book("Java and Web Design","Programming","","978-1-68095-877-5"))
+library.add_book(Book("The Fast and Easy Way to Learn VISUAL C#","Programming","","0-07-226170-6"))
+library.add_book(Book("Object Oriented Approach using C++","Programming","","978-93-817-46-1"))
+library.add_book(Book("Programming Logic & Design","Programming","Joyce Farrell","9978-1337-10207-0"))
+library.add_book(Book("Data Structures and Algorithm in JAVA, International Student version","Programming","Goodrich & Tamassia", "978-0-470-39880-7"))
+library.add_book(Book("JAVA PROGRAMMING: FROM PROBLEM ANALYSIS TO PROGRAM DESIGN","Programming","Dr. D.S Malik","978-1111530532"))
+library.add_book(Book("The Definitive Guide for Java PRogrammers","Programming","Herbert Schildt","978-0-07-226385-5"))
+library.add_book(Book("C++ HOW TO PROGRAM","Programming","Paul Deitel & Harvey Deitel","978-0-273-77987-2"))
+library.add_book(Book("Database Systems Design, Implementation, & Management","Programming","Carlos Coronel & Steven Morris","978-1-337-62790-0"))
+#Networking
+library.add_book(Book("TCP/IP Illustrated","Networking","W. Richard Stevens","978-0-321-33631-6"))
+library.add_book(Book("Information Technology Systems Admin","Networking","","978-1-98465-854-8"))
+library.add_book(Book("Network Management","Networking","","978-1-68095-876-8"))
+library.add_book(Book("FSM based Digital Design using Verilog HDL","Networking","Peter Minns & Ian Elliot","978-0-470-06070-4"))
+#Other category
+library.add_book(Book("","","",""))
+library.add_book(Book("","","",""))
+library.add_book(Book("","","",""))
+library.add_book(Book("","","",""))
 
 library.display_books()
 ISBN = ""
