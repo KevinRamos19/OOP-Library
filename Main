@@ -1,0 +1,162 @@
+from datetime import datetime, timedelta
+
+# Book class
+class Book:
+    def __init__(self, title, category, author, isbn):
+        self.title = title
+        self.category = category
+        self.author = author
+        self.isbn = isbn
+        self.borrowed = False
+
+    def get_title(self):
+        return self.title
+
+    def get_author(self):
+        return self.author
+
+    def get_isbn(self):
+        return self.isbn
+
+    def get_category(self):
+        return self.category
+
+    def is_borrowed(self):
+        return self.borrowed
+
+    def borrow_book(self):
+        self.borrowed = True
+
+    def return_book(self):
+        self.borrowed = False
+
+# Library class
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def display_books(self):
+        print("\n\nLIBRARY BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in self.books:
+            print(f"Title: {book.get_title()}")
+            print(f"Category: {book.get_category()}")
+            print(f"Author: {book.get_author()}")
+            print(f"ISBN: {book.get_isbn()}")
+            print(f"Status: {'Borrowed' if book.is_borrowed() else 'Available'}")
+            print("--------------------------------------------------------------------\n")
+
+    def is_valid_input(self, input_str):
+        if len(input_str) != 8 or not input_str[:2].isdigit() or input_str[2] != '-' or not input_str[3:].isdigit():
+            return False
+        return True
+
+    def borrow_book(self, isbn):
+        input_str = input("\t\t\t!Data should be in format xx-xxxxx!\n\t\t\t\tEnter Sr-Code of Borrower: ")
+        if self.is_valid_input(input_str):
+            print(f"Sr-Code: {input_str}")
+        else:
+            print("Invalid input format!")
+            self.borrow_book(isbn)
+
+        ISBN = input("\n\t\t\t\tEnter ISBN of book to borrow: ")
+        for book in self.books:
+            if book.get_isbn() == ISBN:
+                if not book.is_borrowed():
+                    book.borrow_book()
+
+                    # Get the current date
+                    now = datetime.now()
+                    borrowed_date = now.strftime("%d/%m/%Y")
+
+                    # Display borrowed date
+                    print(f"\n\nBook with ISBN -{ISBN}- has been borrowed today {borrowed_date}")
+
+                    # Calculate the return date three days after borrowing
+                    return_date = now + timedelta(days=3)
+
+                    # Display return date
+                    print(f"\t\tYou have to return it by: {return_date.strftime('%d/%m/%Y')}")
+                else:
+                    print(f"\nBook with ISBN -{ISBN}- is already borrowed.\n")
+                return
+        print(f"Book with ISBN -{ISBN}- does not exist in the library.\n")
+
+    def return_book(self, isbn):
+        ISBN = input("Enter ISBN of book to return: ")
+        for book in self.books:
+            if book.get_isbn() == ISBN:
+                if book.is_borrowed():
+                    book.return_book()
+                    print(f"\nBook with ISBN -{ISBN}- has been returned.\n")
+                else:
+                    print(f"\nBook with ISBN -{ISBN}- is not currently borrowed.\n")
+                return
+        print(f"\nBook with ISBN -{isbn}- that book does not belong to this library.\n")
+
+    def insert_book(self, book):
+        # Check if the ISBN already exists in the library
+        isbn_exists = any(existing_book.get_isbn() == book.get_isbn() for existing_book in self.books)
+
+        # If ISBN exists, prompt the user for action
+        if isbn_exists:
+            print("Sorry we cannot add this book because it has the same ISBN that already exists in the library:")
+            print("But you can update the existing book with the new details")
+            choice = int(input("Enter 1 to update: "))
+            if choice == 1:
+                for existing_book in self.books:
+                    if existing_book.get_isbn() == book.get_isbn():
+                        existing_book = book
+                        print("Existing book with the same ISBN updated with the new details.")
+                        break
+            else:
+                print("Invalid choice. No action taken.")
+        else:
+            # If ISBN does not exist, add the book to the library
+            self.books.append(book)
+            print("Book added to the library.")
+
+
+# Main program
+library = Library()
+
+# Add some books to the library
+library.add_book(Book("Introduction to Calculus and Analysis", "Mathematics", "Richard Courant and Fritz John", "9780471000051"))
+library.add_book(Book("Calculus", "Mathematics", "Michael Spivak", "9780914098911"))
+# ... (add more books as needed)
+
+library.display_books()
+ISBN = ""
+while True:
+    print("\n\n....................................................................\n"
+          "....................................................................\n")
+    print("\n\t\t\t\tLIBRARY MENU\n\t\t\t\tA. Borrow Book\n\t\t\t\tB. Return Book\n\t\t\t\tC. Add Book\n\t\t\t\tD. Exit")
+    choice = input("\t\t\t\tChoose a letter: ")
+
+    if choice.lower() == 'a':
+        library.borrow_book(ISBN)
+        print("....................................................................\n"
+              "....................................................................\n")
+        library.display_books()
+    elif choice.lower() == 'b':
+        library.return_book(ISBN)
+        print("....................................................................\n"
+              "....................................................................\n")
+        library.display_books()
+    elif choice.lower() == 'c':
+        title = input("\nEnter book title: ")
+        category = input("Enter book category: ")
+        author = input("Enter book author: ")
+        isbn = input("Enter book ISBN: ")
+
+        new_book = Book(title, category, author, isbn)
+        library.insert_book(new_book)
+        library.display_books()
+    elif choice.lower() == 'd':
+        print("\nExiting the program.\n\n")
+        break
+    else:
+        print("INVALID KEYWORD!!!");
