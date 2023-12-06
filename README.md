@@ -1,5 +1,5 @@
 Library Management System
-SDG: Innovation 
+SDG: Industry, Innovation and Infrastructure
 
 Members:
 Mara Joy Lontok
