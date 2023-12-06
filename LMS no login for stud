@@ -1,0 +1,202 @@
+class Book:
+    def __init__(self, title, category, author, isbn):
+        self.title = title
+        self.category = category
+        self.author = author
+        self.isbn = isbn
+        self.quantity = 1
+        self.borrowed = 0
+
+    def display_info(self):
+        print(f"Title: {self.title}")
+        print(f"Category: {self.category}")
+        print(f"Author: {self.author}")
+        print(f"ISBN: {self.isbn}")
+        print(f"Quantity: {self.quantity}")
+        print(f"Borrowed: {self.borrowed}\n")
+
+    def borrow_book(self):
+        if self.quantity - self.borrowed > 0:
+            self.borrowed += 1
+            self.quantity -= 1
+            print(f"{self.title} borrowed successfully.")
+        else:
+            print(f"Sorry, {self.title} is not available for borrowing.")
+
+    def return_book(self):
+        if self.borrowed > 0:
+            self.borrowed -= 1
+            print(f"{self.title} returned successfully.")
+        else:
+            print(f"Error: No {self.title} to return.")
+
+
+class Library:
+    def __init__(self, librarian_data):
+        self.books = []  # Initialize an empty list of books
+        self.librarian_data = librarian_data
+        self.current_librarian = None
+
+        # Example books to be added to the library initially
+        initial_books = [
+             Book("Essential Manager's Manual", "Electrical", "Robert Heller & Tim Hindle", "0-7513-0400-x"),
+            Book("Electrical Safety", "Electrical", "", "978-1-68095-498-2"),
+            Book("Electrical Technology", "Electrical", "", "978-93-5115-156-2"),
+            Book("Electricity for Refrigeration, heating and airconditioning", "Electrical", "Russell E. Smith", "978-1-4180-4287-5"),
+            Book("Old Electrical Wiring", "Electrical", "David E. Sharpiro", "978-0071-663571"),
+            #Circuits Category
+            Book("Introduction to Electric Circuits", "Circuits", "Richard C. Dorf & James A. Svoboda", "978-0-470-55302-2"),
+            Book("Engineering Circuit Analysis", "Circuits", "William H. Hayt, Jack E. Kemmerly & Steven M. Ourbin", "0-07-121043-1"),
+            Book("Circuit Analysis", "Circuits", "John M. Santiago Jr., PhD", "978-1-118-49312-0"),
+            Book("Fundamental of Electric Circuits", "Circuits", "Alexander Sadiku", "978-007-126647-5"),
+            Book("Electric Circuits", "Circuits", "Mahmood Nahvi, Phd. & Joseph A. Edminister", "978-0-07-183045-4"),
+            #Philosophy
+            Book("Fundamental of Philosophy", "Philosophy", "Aliana Grimes", "978-1632-4099-66"),
+            Book("Understanding logic and critical thinking", "Philosophy", "Layla Barnaby", "978-16323-9997"),
+            #Programming
+            Book("Java Programs to Accompany Programming Logic and Design", "Programming", "Joyce Farrell", "978-0-538-74477-5"),
+            Book("Java Programming", "Programming", "", "978-93-5115-513-3"),
+            Book("Java and Web Design", "Programming", "", "978-1-68095-877-5"),
+            Book("The Fast and Easy Way to Learn VISUAL C#", "Programming", "", "0-07-226170-6"),
+            Book("Object Oriented Approach using C++", "Programming", "", "978-93-817-46-1"),
+            Book("Programming Logic & Design", "Programming", "Joyce Farrell", "9978-1337-10207-0"),
+            Book("Data Structures and Algorithm in JAVA, International Student version", "Programming", "Goodrich & Tamassia", "978-0-470-39880-7"),
+            Book("JAVA PROGRAMMING: FROM PROBLEM ANALYSIS TO PROGRAM DESIGN", "Programming", "Dr. D.S Malik", "978-1111530532"),
+            Book("The Definitive Guide for Java PRogrammers", "Programming", "Herbert Schildt", "978-0-07-226385-5"),
+            Book("C++ HOW TO PROGRAM", "Programming", "Paul Deitel & Harvey Deitel", "978-0-273-77987-2"),
+            Book("Database Systems Design, Implementation, & Management", "Programming", "Carlos Coronel & Steven Morris", "978-1-337-62790-0"),
+            #Networking
+            Book("TCP/IP Illustrated", "Networking", "W. Richard Stevens", "978-0-321-33631-6"),
+            Book("Information Technology Systems Admin", "Networking", "", "978-1-98465-854-8"),
+            Book("Network Management", "Networking", "", "978-1-68095-876-8"),
+            Book("FSM based Digital Design using Verilog HDL", "Networking", "Peter Minns & Ian Elliot", "978-0-470-06070-4")
+        ]
+
+        # Add the initial books to the library
+        for book in initial_books:
+            self.add_book(book)
+
+    def add_book(self, book):
+        self.books.append(book)
+        print(f"{book.title}, {book.isbn}")
+
+    def remove_book(self, book_title):
+        for book in self.books:
+            if book.title == book_title:
+                self.books.remove(book)
+                print(f"{book.title} removed from the library.")
+                return
+        print(f"Error: {book_title} not found in the library.")
+
+    def display_books(self):
+        print("\nAvailable Books:")
+        for book in self.books:
+            book.display_info()
+
+    def display_history(self):
+        print("\nHistory of Borrowed and Returned Books:")
+        for book in self.books:
+            print(f"{book.title} - Borrowed: {book.borrowed}, Returned: {book.quantity - book.borrowed}")
+
+    def authenticate_librarian(self):
+        librarian_id = input("Enter Librarian ID: ")
+        librarian_password = input("Enter Librarian Password: ")
+
+        for librarian in self.librarian_data:
+            if librarian["librarian_id"] == librarian_id and librarian["librarian_password"] == librarian_password:
+                self.current_librarian = librarian
+                return True
+
+        print("Invalid Librarian ID or Password. Access Denied.")
+        return False
+
+    def librarian_menu(self):
+        if not self.authenticate_librarian():
+            return
+
+        while True:
+            print("\nLibrarian Menu:")
+            print("1. Add a Book")
+            print("2. Remove a Book")
+            print("3. Display Available Books")
+            print("4. History of Borrowed and Returned Books")
+            print("5. Logout")
+
+            choice = input("Enter your choice (1-5): ")
+
+            if choice == "1":
+                title = input("Enter the title of the book: ")
+                category = input("Enter the category of the book: ")
+                author = input("Enter the author of the book: ")
+                isbn = input("Enter the ISBN of the book: ")
+                new_book = Book(title, category, author, isbn)
+                self.add_book(new_book)
+            elif choice == "2":
+                title = input("Enter the title of the book to remove: ")
+                self.remove_book(title)
+            elif choice == "3":
+                self.display_books()
+            elif choice == "4":
+                self.display_history()
+            elif choice == "5":
+                self.current_librarian = None
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 5.")
+
+    def student_menu(self):
+        while True:
+            print("\nStudent Menu:")
+            print("1. View Available Books")
+            print("2. Borrow a Book")
+            print("3. Return a Book")
+            print("4. Exit")
+
+            choice = input("Enter your choice (1-4): ")
+
+            if choice == "1":
+                self.display_books()
+            elif choice == "2":
+                title = input("Enter the title of the book to borrow: ")
+                for book in self.books:
+                    if book.title == title:
+                        book.borrow_book()
+                        break
+                else:
+                    print(f"Error: {title} not found in the library.")
+            elif choice == "3":
+                title = input("Enter the title of the book to return: ")
+                for book in self.books:
+                    if book.title == title:
+                        book.return_book()
+                        break
+                else:
+                    print(f"Error: {title} not found in the library.")
+            elif choice == "4":
+                break
+            else:
+                print("Invalid choice. Please enter a number between 1 and 4.")
+
+
+if __name__ == "__main__":
+    # Librarian data
+    librarian_data = [
+        {"librarian_id": "Libn01", "librarian_password": "librarian01", "first_name": "Mara Joy", "last_name": "Lontok"},
+        {"librarian_id": "Libn02", "librarian_password": "librarian02", "first_name": "Mark Kevin", "last_name": "Ramos"},
+        {"librarian_id": "Libn03", "librarian_password": "librarian03", "first_name": "Rosechel", "last_name": "San Lorenzo"}
+    ]
+
+    # Create an instance of the Library class
+    library_system = Library(librarian_data)
+
+    while True:
+        print("\nLibrary Management System\nMENU\nChoose one, are you\n\tA. Librarian\n\tB. Student")
+
+        user_type = input("Enter your choice (A or B): ")
+
+        if user_type.upper() == "A":
+            library_system.librarian_menu()
+        elif user_type.upper() == "B":
+            library_system.student_menu()
+        else:
+            print("Invalid choice. Please enter A or B.") 
