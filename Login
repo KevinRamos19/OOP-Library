@@ -1,0 +1,548 @@
+import getpass
+
+# User class
+class User:
+    def __init__(self, username, password, role):
+        self.username = username
+        self.password = password
+        self.role = role
+
+# Book class
+class Book:
+    def __init__(self, title, category, author, isbn):
+        self.title = title
+        self.category = category
+        self.author = author
+        self.isbn = isbn
+        self.borrowed = False
+
+    def get_title(self):
+        return self.title
+
+    def get_author(self):
+        return self.author
+
+    def get_isbn(self):
+        return self.isbn
+
+    def get_category(self):
+        return self.category
+
+    def is_borrowed(self):
+        return self.borrowed
+
+    def borrow_book(self):
+        self.borrowed = True
+
+    def return_book(self):
+        self.borrowed = False
+
+# Library class
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def display_books(self):
+        print("\nLIBRARY BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in self.books:
+            print(f"Title: {book.get_title()}")
+            print(f"Category: {book.get_category()}")
+            print(f"Author: {book.get_author()}")
+            print(f"ISBN: {book.get_isbn()}")
+            print(f"Status: {'Borrowed' if book.is_borrowed() else 'Available'}")
+            print("--------------------------------------------------------------------\n")
+
+    def borrow_book(self, isbn):
+        book = self.find_book(isbn)
+        if book and not book.is_borrowed():
+            book.borrow_book()
+            print(f"Book '{book.get_title()}' has been borrowed.")
+        elif book and book.is_borrowed():
+            print(f"Book '{book.get_title()}' is already borrowed.")
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+
+    def return_book(self, isbn):
+        book = self.find_book(isbn)
+        if book and book.is_borrowed():
+            book.return_book()
+            print(f"Book '{book.get_title()}' has been returned.")
+        elif book and not book.is_borrowed():
+            print(f"Book '{book.get_title()}' is not borrowed.")
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+
+    def insert_book(self, book):
+        self.add_book(book)
+        print(f"Book '{book.get_title()}' has been added to the library.")
+
+    def find_book(self, isbn):
+        for book in self.books:
+            if book.get_isbn() == isbn:
+                return book
+        return None
+
+    def show_available_books(self):
+        # Default list of books
+        default_books = [
+            Book("Python Programming", "Programming", "John Doe", "123456"),
+            Book("Data Science Basics", "Data Science", "Jane Smith", "789012"),
+            Book("A+ Guide to IT Technical Support", "Programming", "", "1-305-26643-9"),
+            Book("Elementary Engineering Fracture Mechanics", "Engineering Guide", "David Broek", "978-81-322-0790-0"),
+            Book("Fluid Flow Measurement", "Engineering Guide", "Paul j. Lanasa", "978-0-12-409524-3"),
+            Book("Vector Mechanics", "Engineering Guide", "Ferdinand P. Beer", "978-981-4577-71-7"),
+            Book("Advanced Engineering Mathematics", "Engineering Guide", "Peter v. O'neil", "1-305-63515-9"),
+            Book("Beginning DirectX", "Programming", "Wendy Jones", "1-4354-5895-8"),
+            Book("Using Information Technology", "Programming", "Williams Sawyer", "978-1-259-25566-3"),
+            Book("Discrete Mathematics", "Mathematics", "", "978-1-68095-575-0"),
+            Book("Discrete Mathematics and It's Application", "Mathematics", "", "978-1307428674"),
+            Book("Java Programming", "Programming", "Bart Baesens", "978-1-118-73949"),
+            Book("Biochemistry", "Science", "Stephen Stoker", "978-971-98-0878-7"),
+            Book("Analitical Chemistry", "Science", "Donald M. West", "978-981-4352-69-7"),
+            Book("Steel Designer Manual", "Engineering Guide", "Buick Davidson", "978-1-1192-4986-3"),
+            # Add more default books as needed
+        ]
+
+        print("\nAVAILABLE BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in default_books:
+            print(f"Title: {book.get_title()}")
+            print(f"Category: {book.get_category()}")
+            print(f"Author: {book.get_author()}")
+            print(f"ISBN: {book.get_isbn()}")
+            print("--------------------------------------------------------------------\n")
+
+    def show_returned_books(self):
+        print("\nRETURNED BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in self.books:
+            if not book.is_borrowed():
+                print(f"Title: {book.get_title()}")
+                print(f"Category: {book.get_category()}")
+                print(f"Author: {book.get_author()}")
+                print(f"ISBN: {book.get_isbn()}")
+                print("--------------------------------------------------------------------\n")
+
+# LibrarySystem class
+class LibrarySystem:
+    def __init__(self):
+        self.users = [
+            User("librarian", "librarian_password", "librarian"),
+            User("student1", "student1_password", "student"),
+            # Add more users as needed
+        ]
+        self.current_user = None
+        self.library = Library()
+
+    def login(self):
+        profile = input("Select profile (librarian/student): ").lower()
+
+        if profile == "librarian" or profile == "student":
+            username = input("Enter username: ")
+            password = getpass.getpass("Enter password: ")
+
+            user = next((u for u in self.users if u.username == username and u.password == password and u.role == profile), None)
+
+            if user:
+                self.current_user = user
+                print(f"Welcome, {user.role}!")
+            else:
+                print("Invalid credentials. Please try again.")
+                self.login()
+        else:
+            print("Invalid profile. Please choose 'librarian' or 'student'.")
+            self.login()
+
+    def run_librarian_menu(self):
+        while True:
+            print("\nLIBRARIAN MENU")
+            print("\tA. Show Borrowed Books")
+            print("\tB. Show Returned Books")
+            print("\tC. Add Book")
+            print("\tD. Show All Books")
+            print("\tE. Exit")
+
+            choice = input("Choose a letter: ")
+
+            if choice.lower() == 'a':
+                self.library.show_borrowed_books()
+
+            elif choice.lower() == 'b':
+                self.library.show_returned_books()
+
+            elif choice.lower() == 'c':
+                self.add_book()
+
+            elif choice.lower() == 'd':
+                self.show_all_books()
+
+            elif choice.lower() == 'e':
+                print("\nExiting librarian menu.\n")
+                break
+
+            else:
+                print("Invalid keyword!!!")
+
+    def add_book(self):
+        title = input("\nEnter book title: ")
+        category = input("Enter book category: ")
+        author = input("Enter book author: ")
+        isbn = input("Enter book ISBN: ")
+
+        new_book = Book(title, category, author, isbn)
+        self.library.insert_book(new_book)
+
+    def show_all_books(self):
+        print("\nDISPLAY BOOKS")
+        print("\tA. Show All Books")
+        print("\tB. Show Available Books")
+        print("\tC. Show Borrowed Books")
+
+        display_choice = input("Choose an option: ")
+
+        if display_choice.lower() == 'a':
+            self.library.display_books()
+        elif display_choice.lower() == 'b':
+            self.library.show_available_books()
+        elif display_choice.lower() == 'c':
+            self.library.show_borrowed_books()
+        else:
+            print("Invalid option. Returning to librarian menu.")
+
+    def run_student_menu(self):
+        while True:
+            print("\nSTUDENT MENU")
+            print("\tA. Show All Books")
+            print("\tB. Borrow a Book")
+            print("\tC. Return a Book")
+            print("\tD. Exit")
+
+            choice = input("Choose a letter: ")
+
+            if choice.lower() == 'a':
+                self.library.show_all_books()
+
+            elif choice.lower() == 'b':
+                self.borrow_book()
+
+            elif choice.lower() == 'c':
+                self.return_book()
+
+            elif choice.lower() == 'd':
+                print("\nExiting student menu.\n")
+                break
+
+            else:
+                print("Invalid keyword!!!")
+
+    def borrow_book(self):
+        self.library.show_available_books()
+        isbn = input("\nEnter the ISBN of the book you want to borrow: ")
+        self.library.borrow_book(isbn)
+
+    def return_book(self):
+        self.library.show_borrowed_books()
+        isbn = input("\nEnter the ISBN of the book you want to return: ")
+        self.library.return_book(isbn)
+
+    def main_menu(self):
+        while True:
+            print("\nMAIN MENU")
+            print("\t1. Login")
+            print("\t2. Exit")
+
+            option = input("Choose an option: ")
+
+            if option == "1":
+                self.login()
+                if self.current_user and self.current_user.role == "librarian":
+                    self.run_librarian_menu()
+                elif self.current_user and self.current_user.role == "student":
+                    self.run_student_menu()
+            elif option == "2":
+                print("Exiting the program.\n\n")
+                break
+            else:
+                print("Invalid option. Please try again.")
+
+# Example usage:
+library_system = LibrarySystem()
+library_system.main_menu()
+import getpass
+
+# User class
+class User:
+    def __init__(self, username, password, role):
+        self.username = username
+        self.password = password
+        self.role = role
+
+# Book class
+class Book:
+    def __init__(self, title, category, author, isbn):
+        self.title = title
+        self.category = category
+        self.author = author
+        self.isbn = isbn
+        self.borrowed = False
+
+    def get_title(self):
+        return self.title
+
+    def get_author(self):
+        return self.author
+
+    def get_isbn(self):
+        return self.isbn
+
+    def get_category(self):
+        return self.category
+
+    def is_borrowed(self):
+        return self.borrowed
+
+    def borrow_book(self):
+        self.borrowed = True
+
+    def return_book(self):
+        self.borrowed = False
+
+# Library class
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def display_books(self):
+        print("\nLIBRARY BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in self.books:
+            print(f"Title: {book.get_title()}")
+            print(f"Category: {book.get_category()}")
+            print(f"Author: {book.get_author()}")
+            print(f"ISBN: {book.get_isbn()}")
+            print(f"Status: {'Borrowed' if book.is_borrowed() else 'Available'}")
+            print("--------------------------------------------------------------------\n")
+
+    def borrow_book(self, isbn):
+        book = self.find_book(isbn)
+        if book and not book.is_borrowed():
+            book.borrow_book()
+            print(f"Book '{book.get_title()}' has been borrowed.")
+        elif book and book.is_borrowed():
+            print(f"Book '{book.get_title()}' is already borrowed.")
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+
+    def return_book(self, isbn):
+        book = self.find_book(isbn)
+        if book and book.is_borrowed():
+            book.return_book()
+            print(f"Book '{book.get_title()}' has been returned.")
+        elif book and not book.is_borrowed():
+            print(f"Book '{book.get_title()}' is not borrowed.")
+        else:
+            print(f"Book with ISBN {isbn} not found.")
+
+    def insert_book(self, book):
+        self.add_book(book)
+        print(f"Book '{book.get_title()}' has been added to the library.")
+
+    def find_book(self, isbn):
+        for book in self.books:
+            if book.get_isbn() == isbn:
+                return book
+        return None
+
+    def show_available_books(self):
+        # Default list of books
+        default_books = [
+            Book("Python Programming", "Programming", "John Doe", "123456"),
+            Book("Data Science Basics", "Data Science", "Jane Smith", "789012"),
+            Book("A+ Guide to IT Technical Support", "Programming", "", "1-305-26643-9"),
+            Book("Elementary Engineering Fracture Mechanics", "Engineering Guide", "David Broek", "978-81-322-0790-0"),
+            Book("Fluid Flow Measurement", "Engineering Guide", "Paul j. Lanasa", "978-0-12-409524-3"),
+            Book("Vector Mechanics", "Engineering Guide", "Ferdinand P. Beer", "978-981-4577-71-7"),
+            Book("Advanced Engineering Mathematics", "Engineering Guide", "Peter v. O'neil", "1-305-63515-9"),
+            Book("Beginning DirectX", "Programming", "Wendy Jones", "1-4354-5895-8"),
+            Book("Using Information Technology", "Programming", "Williams Sawyer", "978-1-259-25566-3"),
+            Book("Discrete Mathematics", "Mathematics", "", "978-1-68095-575-0"),
+            Book("Discrete Mathematics and It's Application", "Mathematics", "", "978-1307428674"),
+            Book("Java Programming", "Programming", "Bart Baesens", "978-1-118-73949"),
+            Book("Biochemistry", "Science", "Stephen Stoker", "978-971-98-0878-7"),
+            Book("Analitical Chemistry", "Science", "Donald M. West", "978-981-4352-69-7"),
+            Book("Steel Designer Manual", "Engineering Guide", "Buick Davidson", "978-1-1192-4986-3"),
+            # Add more default books as needed
+        ]
+
+        print("\nAVAILABLE BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in default_books:
+            print(f"Title: {book.get_title()}")
+            print(f"Category: {book.get_category()}")
+            print(f"Author: {book.get_author()}")
+            print(f"ISBN: {book.get_isbn()}")
+            print("--------------------------------------------------------------------\n")
+
+    def show_returned_books(self):
+        print("\nRETURNED BOOKS:\n")
+        print("--------------------------------------------------------------------\n")
+        for book in self.books:
+            if not book.is_borrowed():
+                print(f"Title: {book.get_title()}")
+                print(f"Category: {book.get_category()}")
+                print(f"Author: {book.get_author()}")
+                print(f"ISBN: {book.get_isbn()}")
+                print("--------------------------------------------------------------------\n")
+
+# LibrarySystem class
+class LibrarySystem:
+    def __init__(self):
+        self.users = [
+            User("lib", "librarian_password", "librarian"),
+            User("student1", "student1_password", "student"),
+            # Add more users as needed
+        ]
+        self.current_user = None
+        self.library = Library()
+
+    def login(self):
+        profile = input("Select profile (librarian/student): ").lower()
+
+        if profile == "librarian" or profile == "student":
+            username = input("Enter username: ")
+            password = getpass.getpass("Enter password: ")
+
+            user = next((u for u in self.users if u.username == username and u.password == password and u.role == profile), None)
+
+            if user:
+                self.current_user = user
+                print(f"Welcome, {user.role}!")
+            else:
+                print("Invalid credentials. Please try again.")
+                self.login()
+        else:
+            print("Invalid profile. Please choose 'librarian' or 'student'.")
+            self.login()
+
+    def run_librarian_menu(self):
+        while True:
+            print("\nLIBRARIAN MENU")
+            print("\tA. Show Borrowed Books")
+            print("\tB. Show Returned Books")
+            print("\tC. Add Book")
+            print("\tD. Show All Books")
+            print("\tE. Exit")
+
+            choice = input("Choose a letter: ")
+
+            if choice.lower() == 'a':
+                self.library.show_borrowed_books()
+
+            elif choice.lower() == 'b':
+                self.library.show_returned_books()
+
+            elif choice.lower() == 'c':
+                self.add_book()
+
+            elif choice.lower() == 'd':
+                self.show_all_books()
+
+            elif choice.lower() == 'e':
+                print("\nExiting librarian menu.\n")
+                break
+
+            else:
+                print("Invalid keyword!!!")
+
+    def add_book(self):
+        title = input("\nEnter book title: ")
+        category = input("Enter book category: ")
+        author = input("Enter book author: ")
+        isbn = input("Enter book ISBN: ")
+
+        new_book = Book(title, category, author, isbn)
+        self.library.insert_book(new_book)
+
+    def show_all_books(self):
+        print("\nDISPLAY BOOKS")
+        print("\tA. Show All Books")
+        print("\tB. Show Available Books")
+        print("\tC. Show Borrowed Books")
+
+        display_choice = input("Choose an option: ")
+
+        if display_choice.lower() == 'a':
+            self.library.display_books()
+        elif display_choice.lower() == 'b':
+            self.library.show_available_books()
+        elif display_choice.lower() == 'c':
+            self.library.show_borrowed_books()
+        else:
+            print("Invalid option. Returning to librarian menu.")
+
+    def run_student_menu(self):
+        while True:
+            print("\nSTUDENT MENU")
+            print("\tA. Show All Books")
+            print("\tB. Borrow a Book")
+            print("\tC. Return a Book")
+            print("\tD. Exit")
+
+            choice = input("Choose a letter: ")
+
+            if choice.lower() == 'a':
+                self.library.show_all_books()
+
+            elif choice.lower() == 'b':
+                self.borrow_book()
+
+            elif choice.lower() == 'c':
+                self.return_book()
+
+            elif choice.lower() == 'd':
+                print("\nExiting student menu.\n")
+                break
+
+            else:
+                print("Invalid keyword!!!")
+
+    def borrow_book(self):
+        self.library.show_available_books()
+        isbn = input("\nEnter the ISBN of the book you want to borrow: ")
+        self.library.borrow_book(isbn)
+
+    def return_book(self):
+        self.library.show_borrowed_books()
+        isbn = input("\nEnter the ISBN of the book you want to return: ")
+        self.library.return_book(isbn)
+
+    def main_menu(self):
+        while True:
+            print("\nMAIN MENU")
+            print("\t1. Login")
+            print("\t2. Exit")
+
+            option = input("Choose an option: ")
+
+            if option == "1":
+                self.login()
+                if self.current_user and self.current_user.role == "librarian":
+                    self.run_librarian_menu()
+                elif self.current_user and self.current_user.role == "student":
+                    self.run_student_menu()
+            elif option == "2":
+                print("Exiting the program.\n\n")
+                break
+            else:
+                print("Invalid option. Please try again.")
+
+# Example usage:
+library_system = LibrarySystem()
+library_system.main_menu()
