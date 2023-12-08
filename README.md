@@ -12,10 +12,6 @@ by the student processes, providing a user-friendly interface for students and l
 
 Features
 
-Book Search:
-
-    Utilize technology to search for books in the library using sql commands or syntax.
-
 Borrow and Return:
 
     Students can easily borrow and return books by providing the necessary information.
