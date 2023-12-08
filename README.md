@@ -9,16 +9,20 @@ About Library Management System
 The Library Management System is a software application designed to enhance the efficiency of library operations. It incorporates innovative features to streamline book search, borrowing, returning, and display history of books borrowed and returned by the student processes, providing a user-friendly interface for students and librarian.
 
 Features
+
 Book Search: Utilize technology to search for books in the library using sql commands or syntax.
 
 Borrow and Return:
+
 Students can easily borrow and return books by providing the necessary information.
 View Borrowed Books: Students can view the books they have borrowed.
 
 Book Categories:
+
 The program supports books in the categories of electrical, circuits, programming, and networking.
 
 User-Friendly Interface:
+
 Students interact with the system by choosing options such as displaying available books, borrowing, returning, and exiting. Librarian interact with the system by choosing options such as adding, removing, displaying available books and view the history of books being borrowed and returned.
 
 Why Industry, Innovation and Infrastructure as SDG?
