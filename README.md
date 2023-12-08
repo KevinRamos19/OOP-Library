@@ -17,8 +17,6 @@ View Borrowed Books: Students can view the books they have borrowed.
 
 Book Categories: The program supports books in the categories of electrical, circuits, programming, and networking.
 
-Automatic Due Date: Display the due date for borrowed books, not exceeding 3 days.
-
 User-Friendly Interface: Students interact with the system by choosing options such as displaying available books, borrowing, returning, and exiting. Librarian interact with the system by choosing options such as adding, removing, displaying available books and view the history of books being borrowed and returned.
 
 Why Industry, Innovation and Infrastructure as SDG?
